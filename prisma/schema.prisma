@@ -9,3 +9,63 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      Role[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Issue     Issue[]
+}
+
+model Book {
+  id            Int      @id @default(autoincrement())
+  name          String
+  author        String
+  price         Int
+  edition       Int
+  publishedDate DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Stock         Stock?
+  Issue         Issue[]
+  category      Category @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+}
+
+model Stock {
+  id        Int      @id @default(autoincrement())
+  sku       String?  @unique
+  count     Int
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  parent_id Int?
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Book      Book[]
+}
+
+model Issue {
+  id        Int      @id @default(autoincrement())
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  fine      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
