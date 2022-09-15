@@ -58,11 +58,16 @@ export class AuthService {
       sub: userId,
       email,
     };
-    const secret = await this.config.get('JWT-SECRET');
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
-      secret: secret,
-    });
-    return { access_token: token };
+    try {
+      const secret = await this.config.get('JWT_SECRET');
+      const token = await this.jwt.signAsync(payload, {
+        expiresIn: '15m',
+        secret: secret,
+      });
+      return { access_token: token };
+    } catch (error) {
+      console.log('Error while generating Signtoken');
+      return { msg: 'Something went wrong try again!!' };
+    }
   }
 }
