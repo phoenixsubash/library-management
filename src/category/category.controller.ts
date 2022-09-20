@@ -40,7 +40,7 @@ export class CategoryController {
   }
 
   //PATCH Category
-  @Patch('id:')
+  @Patch(':id')
   @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   editCategory(
@@ -51,10 +51,9 @@ export class CategoryController {
   }
 
   //DELETE Category
-  @Delete('id:')
+  @Delete(':id')
   @Roles(Role.ADMIN)
   deleteCategory(@Param('id', ParseIntPipe) categoryId: number) {
-    console.log(categoryId);
     return this.categoryService.deleteCategory(categoryId);
   }
 }

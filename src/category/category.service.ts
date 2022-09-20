@@ -39,6 +39,7 @@ export class CategoryService {
   async editCategory(categoryId: number, dto: UpdateCategoryDto) {
     return await handleException(async () => {
       const category = await this.findCategory(categoryId);
+      console.log('category', category);
       if (category.title == dto.title) {
         throw ' Repeted Category!!! try Unique';
       }
@@ -56,25 +57,28 @@ export class CategoryService {
 
   async deleteCategory(categoryId) {
     return await handleException(async () => {
-      const category = this.findCategory(categoryId);
-      return this.prisma.category.delete({
+      const category = await this.findCategory(categoryId);
+      const deleted = await this.prisma.category.delete({
         where: {
           id: categoryId,
         },
       });
+      if (!deleted) {
+        throw 'Couldnot delete this category';
+      }
+      return { message: `Successfully deleted Category${category.title}` };
     });
   }
 
-  findCategory(categoryId) {
-    try {
-      const category = this.prisma.category.findUnique({
-        where: {
-          id: categoryId,
-        },
-      });
-      return category;
-    } catch {
-      throw new Error('Error while finding category');
+  async findCategory(categoryId) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+    if (!category) {
+      throw 'couldnot find category';
     }
+    return category;
   }
 }

@@ -11,11 +11,10 @@ export class UserService {
 
   //GET User
   async getUser() {
-    return handleException(async () => {
+    return await handleException(async () => {
       const users = await this.prisma.user.findMany();
-      console.log(users);
       if (!users) {
-        throw 'Problem while finding users';
+        throw 'No any users';
       }
       return users;
     });
@@ -67,7 +66,7 @@ export class UserService {
       });
 
       if (!user) {
-        throw 'User Doesnot exist';
+        throw { message: "user doesn't exist" };
       }
       return { message: 'Successfully Updated' };
     });
@@ -76,6 +75,10 @@ export class UserService {
   // DELETE User
   async deleteUser(userId: number) {
     return await handleException(async () => {
+      const user = await this.findUser(userId);
+      if (!user) {
+        throw 'no any user found of this userid';
+      }
       const deleteUser = await this.prisma.user.delete({
         where: {
           id: userId,
@@ -86,7 +89,7 @@ export class UserService {
         console.log('error while deleting user');
         throw 'Couldnot delete user';
       }
-      return { message: `Successfully Deleted userId : ${userId}` };
+      return { message: `Successfully Deleted userId  ${userId}` };
     });
   }
 
