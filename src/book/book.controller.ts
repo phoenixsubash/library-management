@@ -9,10 +9,17 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/auth/decorator';
+import { Role } from 'src/auth/decorator/enum/role.enum';
+import { JwtAuthGuard } from 'src/auth/decorator/strategy';
+import { RolesGuard } from 'src/auth/decorator/strategy/roles.guard';
 import { BookService } from './book.service';
 import { BookCreateDto, BookEditDto } from './dto/book.dto';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.ADMIN)
 @Controller('book')
 export class BookController {
   constructor(private bookService: BookService) {}
