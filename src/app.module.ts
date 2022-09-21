@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { BookModule } from './book/book.module';
 import { CategoryModule } from './category/category.module';
 import { IssueModule } from './issue/issue.module';
+import { StockModule } from './stock/stock.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { IssueModule } from './issue/issue.module';
     BookModule,
     CategoryModule,
     IssueModule,
+    StockModule,
   ],
   controllers: [],
   providers: [],

@@ -12,7 +12,18 @@ export class UserService {
   //GET User
   async getUser() {
     return await handleException(async () => {
-      const users = await this.prisma.user.findMany();
+      const users = await this.prisma.user.findMany({
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          Issue: {
+            select: {
+              book: true,
+            },
+          },
+        },
+      });
       if (!users) {
         throw 'No any users';
       }

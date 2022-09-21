@@ -7,5 +7,6 @@ import { BookService } from './book.service';
   controllers: [BookController],
   providers: [BookService],
   imports: [PrismaModule],
+  exports: [BookService],
 })
 export class BookModule {}

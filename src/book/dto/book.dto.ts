@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
   IsDate,
   IsDateString,
@@ -22,12 +22,14 @@ export class BookCreateDto {
   price: number;
 
   @IsNumber()
-  category: Category;
+  @IsNotEmpty()
+  categoryId: number;
 
   @IsOptional()
   @IsNumber()
   edition: number;
 
+  @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   publishedDate: Date;
@@ -54,10 +56,13 @@ export class BookEditDto {
   edition: number;
 
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   @IsNotEmpty()
-  publishedDate: string;
+  publishedDate: Date;
 
   @IsOptional()
-  category: Category;
+  @IsNumber()
+  @IsNotEmpty()
+  categoryId: number;
 }
